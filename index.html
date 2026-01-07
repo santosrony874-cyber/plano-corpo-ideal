@@ -629,10 +629,19 @@
       const key = steps[current].dataset.key;
 
       if(key === "nome"){
-        const v = (document.getElementById("nome").value || "").trim();
-        if(v.length < 2){ showToast("t0"); return false; }
-        state.nome = v; return true;
-      }
+  const input = document.getElementById("nome");
+  if(!input){
+    return true;
+  }
+  const v = input.value.trim();
+  if(v.length < 2){
+    showToast("t0");
+    return false;
+  }
+  state.nome = v;
+  return true;
+}
+
       if(key === "idade"){
         const v = Number(document.getElementById("idade").value);
         if(!v || v < 10 || v > 90){ showToast("t1"); return false; }
