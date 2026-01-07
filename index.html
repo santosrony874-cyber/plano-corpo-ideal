@@ -587,166 +587,135 @@
     </div>
   </div>
 
-  <script>
-    const steps = Array.from(document.querySelectorAll(".step"));
-    const bar = document.getElementById("bar");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
+<script>
+  const steps = Array.from(document.querySelectorAll(".step"));
+  const bar = document.getElementById("bar");
+  const nextBtn = document.getElementById("nextBtn");
+  const backBtn = document.getElementById("backBtn");
 
-    const state = {
-      nome: "",
-      idade: "",
-      peso: "",
-      altura: "",
-      status: "",
-      frequencia: "",
-      local: "",
-      objetivo: "",
-      nivel: ""
-    };
+  let current = 0;
 
-    let current = 0;
+  const state = {
+    nome: "",
+    idade: "",
+    peso: "",
+    altura: "",
+    status: "",
+    frequencia: "",
+    local: "",
+    objetivo: "",
+    nivel: ""
+  };
 
-    function setProgress(){
-      const total = steps.length - 1; // sem contar o step atual? vamos usar total de passos
-      const pct = Math.round((current / (steps.length - 1)) * 100);
-      bar.style.width = pct + "%";
-      backBtn.style.visibility = current === 0 ? "hidden" : "visible";
+  function showStep(i){
+    steps.forEach((s, idx) => {
+      s.classList.toggle("active", idx === i);
+    });
+    backBtn.style.display = i === 0 ? "none" : "inline-flex";
+    setProgress();
+  }
 
-      // texto do botão
-      nextBtn.textContent = (current === steps.length - 1) ? "LIBERAR MEU ACESSO" : "Continuar";
+  function setProgress(){
+    if(!bar) return;
+    const p = Math.round(((current + 1) / steps.length) * 100);
+    bar.style.width = p + "%";
+  }
+
+  function toast(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.style.display = "block";
+    setTimeout(()=> el.style.display = "none", 2200);
+  }
+
+  function validateStep(){
+    const step = steps[current];
+    if(!step) return true;
+
+    const key = step.getAttribute("data-key");
+
+    if(key === "nome"){
+      const input = document.getElementById("nome");
+      const v = (input?.value || "").trim();
+      if(v.length < 2){ toast("t0"); return false; }
+      state.nome = v; return true;
     }
 
-    function showToast(id){
-      const t = document.getElementById(id);
-      if(!t) return;
-      t.classList.add("show");
-      setTimeout(()=>t.classList.remove("show"), 1800);
+    if(key === "idade"){
+      const v = (document.getElementById("idade")?.value || "").trim();
+      if(!v){ toast("t0"); return false; }
+      state.idade = v; return true;
     }
 
-    function validateStep(){
-      // limpa seleção de toast
-      const key = steps[current].dataset.key;
+    if(key === "peso"){
+      const v = (document.getElementById("peso")?.value || "").trim();
+      if(!v){ toast("t0"); return false; }
+      state.peso = v; return true;
+    }
 
-      if(key === "nome"){
-  const input = document.getElementById("nome");
-  if(!input){
+    if(key === "altura"){
+      const v = (document.getElementById("altura")?.value || "").trim();
+      if(!v){ toast("t0"); return false; }
+      state.altura = v; return true;
+    }
+
+    // selects
+    if(key === "status"){
+      const v = document.getElementById("status")?.value;
+      if(!v){ toast("t0"); return false; }
+      state.status = v; return true;
+    }
+    if(key === "frequencia"){
+      const v = document.getElementById("frequencia")?.value;
+      if(!v){ toast("t0"); return false; }
+      state.frequencia = v; return true;
+    }
+    if(key === "local"){
+      const v = document.getElementById("local")?.value;
+      if(!v){ toast("t0"); return false; }
+      state.local = v; return true;
+    }
+    if(key === "objetivo"){
+      const v = document.getElementById("objetivo")?.value;
+      if(!v){ toast("t0"); return false; }
+      state.objetivo = v; return true;
+    }
+    if(key === "nivel"){
+      const v = document.getElementById("nivel")?.value;
+      if(!v){ toast("t0"); return false; }
+      state.nivel = v; return true;
+    }
+
     return true;
   }
-  const v = input.value.trim();
-  if(v.length < 2){
-    showToast("t0");
-    return false;
+
+  function nextStep(){
+    if(!validateStep()) return;
+
+    // última etapa: salvar e ir para pagamento
+    if(current >= steps.length - 1){
+      localStorage.setItem("pci_quiz", JSON.stringify(state));
+      window.location.href = "https://mpago.la/28TAeox";
+      return;
+    }
+
+    current++;
+    showStep(current);
   }
-  state.nome = v;
-  return true;
-}
 
-      if(key === "idade"){
-        const v = Number(document.getElementById("idade").value);
-        if(!v || v < 10 || v > 90){ showToast("t1"); return false; }
-        state.idade = v; return true;
-      }
-      if(key === "peso"){
-        const v = Number(document.getElementById("peso").value);
-        if(!v || v < 30 || v > 250){ showToast("t2"); return false; }
-        state.peso = v; return true;
-      }
-      if(key === "altura"){
-        const v = Number(document.getElementById("altura").value);
-        if(!v || v < 120 || v > 230){ showToast("t3"); return false; }
-        state.altura = v; return true;
-      }
+  function backStep(){
+    if(current <= 0) return;
+    current--;
+    showStep(current);
+  }
 
-      // etapas de escolha
-      if(["status","frequencia","local","objetivo","nivel"].includes(key)){
-        if(!state[key]){
-          const tid = "t" + current; // baseado na ordem
-          showToast(tid);
-          return false;
-        }
-        return true;
-      }
+  // liga botões (mais confiável)
+  nextBtn.addEventListener("click", nextStep);
+  backBtn.addEventListener("click", backStep);
 
-      // checkout: ok
-      return true;
-    }
+  // inicia
+  showStep(0);
+</script>
 
-    function nextStep(){
-      if(current === steps.length - 1){
-        // AQUI entra o pagamento/checkout.
-        // salva as respostas do quiz
-localStorage.setItem("pci_quiz", JSON.stringify(state));
-
-// redireciona para o pagamento (Mercado Pago)
-window.location.href = https://mpago.la/28TAeox
-return;
-
-      }
-
-      if(!validateStep()) return;
-
-      steps[current].classList.remove("active");
-      current++;
-      steps[current].classList.add("active");
-
-      if(steps[current].dataset.key === "checkout"){
-        buildSummary();
-      }
-
-      setProgress();
-    }
-
-    function backStep(){
-      if(current === 0) return;
-      steps[current].classList.remove("active");
-      current--;
-      steps[current].classList.add("active");
-      setProgress();
-    }
-
-    function buildSummary(){
-      const imc = (state.peso / Math.pow(state.altura/100, 2)).toFixed(1);
-      const s = `
-        <b>Resumo do seu perfil</b><br><br>
-        👤 <b>Nome:</b> ${state.nome}<br>
-        🎂 <b>Idade:</b> ${state.idade}<br>
-        ⚖️ <b>Peso:</b> ${state.peso} kg<br>
-        📏 <b>Altura:</b> ${state.altura} cm<br>
-        📌 <b>IMC estimado:</b> ${imc}<br><br>
-        🏃 <b>Status:</b> ${state.status}<br>
-        📅 <b>Frequência:</b> ${state.frequencia}x/semana<br>
-        🏋️ <b>Local:</b> ${state.local}<br>
-        🎯 <b>Objetivo:</b> ${state.objetivo}<br>
-        🚀 <b>Nível:</b> ${state.nivel}<br><br>
-        ✅ Seu plano será gerado com base nessas respostas.
-      `;
-      document.getElementById("summary").innerHTML = s;
-    }
-
-    // seleção por clique nos cards
-    document.querySelectorAll(".step").forEach(step=>{
-      const key = step.dataset.key;
-      step.querySelectorAll(".choice").forEach(ch=>{
-        ch.addEventListener("click", ()=>{
-          step.querySelectorAll(".choice").forEach(c=>c.classList.remove("selected"));
-          ch.classList.add("selected");
-          state[key] = ch.dataset.value;
-        });
-      });
-    });
-
-    // enter para avançar nos inputs
-    ["nome","idade","peso","altura"].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el){
-        el.addEventListener("keydown", (e)=>{
-          if(e.key === "Enter") nextStep();
-        });
-      }
-    });
-
-    setProgress();
-  </script>
 </body>
 </html>
