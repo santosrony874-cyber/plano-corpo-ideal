@@ -629,65 +629,43 @@
   }
 
   function validateStep(){
-    const step = steps[current];
-    if(!step) return true;
+  const step = steps[current];
+  if(!step) return true;
 
-    const key = step.getAttribute("data-key");
-
-    if(key === "nome"){
-      const input = document.getElementById("nome");
-      const v = (input?.value || "").trim();
-      if(v.length < 2){ toast("t0"); return false; }
-      state.nome = v; return true;
+  // INPUT TEXTO (nome, idade, peso, altura)
+  const input = step.querySelector("input");
+  if(input){
+    const v = input.value.trim();
+    if(v.length < 1){
+      toast("t0");
+      return false;
     }
-
-    if(key === "idade"){
-      const v = (document.getElementById("idade")?.value || "").trim();
-      if(!v){ toast("t0"); return false; }
-      state.idade = v; return true;
-    }
-
-    if(key === "peso"){
-      const v = (document.getElementById("peso")?.value || "").trim();
-      if(!v){ toast("t0"); return false; }
-      state.peso = v; return true;
-    }
-
-    if(key === "altura"){
-      const v = (document.getElementById("altura")?.value || "").trim();
-      if(!v){ toast("t0"); return false; }
-      state.altura = v; return true;
-    }
-
-    // selects
-    if(key === "status"){
-      const v = document.getElementById("status")?.value;
-      if(!v){ toast("t0"); return false; }
-      state.status = v; return true;
-    }
-    if(key === "frequencia"){
-      const v = document.getElementById("frequencia")?.value;
-      if(!v){ toast("t0"); return false; }
-      state.frequencia = v; return true;
-    }
-    if(key === "local"){
-      const v = document.getElementById("local")?.value;
-      if(!v){ toast("t0"); return false; }
-      state.local = v; return true;
-    }
-    if(key === "objetivo"){
-      const v = document.getElementById("objetivo")?.value;
-      if(!v){ toast("t0"); return false; }
-      state.objetivo = v; return true;
-    }
-    if(key === "nivel"){
-      const v = document.getElementById("nivel")?.value;
-      if(!v){ toast("t0"); return false; }
-      state.nivel = v; return true;
-    }
-
+    state[input.id] = v;
     return true;
   }
+
+  // SELECT
+  const select = step.querySelector("select");
+  if(select){
+    if(!select.value){
+      toast("t0");
+      return false;
+    }
+    state[select.id] = select.value;
+    return true;
+  }
+
+  // OPÇÕES CLICÁVEIS (cards)
+  const activeOption = step.querySelector(".option.active");
+  if(activeOption){
+    const key = step.getAttribute("data-key");
+    state[key] = activeOption.getAttribute("data-value");
+    return true;
+  }
+
+  return true;
+}
+
 
   function nextStep(){
     if(!validateStep()) return;
