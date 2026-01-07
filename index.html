@@ -667,20 +667,24 @@
 }
 
 
-  function nextStep() {
-  // se estiver na última etapa, vai pro checkout
+ function nextStep() {
+
+  // valida a etapa atual (se existir validação)
+  if (typeof validateStep === "function") {
+    if (!validateStep()) return;
+  }
+
+  // se for a última etapa, vai pro checkout
   if (current >= steps.length - 1) {
     window.location.href = "https://pay.kiwify.com.br/2aHDqEE";
     return;
   }
 
-  // resto do seu código continua aqui...
-}
+  // avança para a próxima pergunta
+  current++;
+  showStep(current);
 }
 
-    current++;
-    showStep(current);
-  }
 
   function backStep(){
     if(current <= 0) return;
