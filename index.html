@@ -673,7 +673,9 @@
     // última etapa: salvar e ir para pagamento
     if(current >= steps.length - 1){
       localStorage.setItem("pci_quiz", JSON.stringify(state));
-      window.location.href = "https://mpago.la/28TAeox";
+      window.open("https://mpago.la/28TAeox", "_blank");
+window.location.href = "./obrigado.html";
+
       return;
     }
 
