@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Plano Corpo Ideal – Avançado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 480px;
+            background: #ffffff;
+            margin: 40px auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #111;
+        }
+        p {
+            text-align: center;
+            color: #555;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            background: #27ae60;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #219150;
+        }
+        .price {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 20px;
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Plano Corpo Ideal – Avançado</h1>
+    <p>Preencha os dados abaixo e receba seu plano personalizado</p>
+
+    <form action="COLE_AQUI_SEU_LINK_DO_MERCADO_PAGO" method="GET">
+        <label>Nome</label>
+        <input type="text" required>
+
+        <label>Idade</label>
+        <input type="number" required>
+
+        <label>Peso atual (kg)</label>
+        <input type="number" required>
+
+        <label>Altura (cm)</label>
+        <input type="number" required>
+
+        <label>Objetivo</label>
+        <select required>
+            <option value="">Selecione</option>
+            <option>Emagrecimento</option>
+            <option>Hipertrofia</option>
+            <option>Definição</option>
+        </select>
+
+        <label>Nível de treino</label>
+        <select required>
+            <option value="">Selecione</option>
+            <option>Iniciante</option>
+            <option>Intermediário</option>
+            <option>Avançado</option>
+        </select>
+
+        <div class="price">Acesso imediato – R$ 39,90</div>
+
+        <button type="submit">GERAR MEU PLANO AGORA</button>
+    </form>
+
+    <div class="footer">
+        Pagamento seguro via Mercado Pago • Acesso online
+    </div>
+</div>
+
+</body>
+</html>
