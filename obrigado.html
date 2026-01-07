@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Plano liberado ✅</title>
+  <style>
+    body{margin:0;font-family:Arial,sans-serif;background:#0b1220;color:#eaf0ff}
+    .wrap{max-width:760px;margin:0 auto;padding:18px}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:16px}
+    h1{margin:0 0 8px}
+    p{color:#a7b3d6;line-height:1.4}
+    .btn{display:block;text-align:center;text-decoration:none;font-weight:800;padding:14px;border-radius:14px;margin-top:10px}
+    .btn.primary{background:#2ecc71;color:#052012}
+    .btn.alt{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);color:#eaf0ff}
+    .box{margin-top:12px;padding:12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);color:#cdd7f5}
+    .small{font-size:12px;color:#a7b3d6;margin-top:10px}
+    textarea{width:100%;min-height:170px;border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.2);color:#eaf0ff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>✅ Acesso liberado!</h1>
+      <p>Seu plano foi gerado com base nas respostas do quiz. Você pode copiar/baixar e também enviar no WhatsApp.</p>
+
+      <div class="box">
+        <b>Seu plano (resumo):</b>
+        <div id="plano" class="small" style="margin-top:8px"></div>
+      </div>
+
+      <div class="box">
+        <b>Mensagem pronta (WhatsApp):</b>
+        <textarea id="msg"></textarea>
+        <a id="wa" class="btn primary" target="_blank">📲 ENVIAR NO WHATSAPP</a>
+        <button class="btn alt" onclick="downloadTxt()">⬇️ BAIXAR COMO TXT</button>
+      </div>
+
+      <div class="small">
+        Dica: se o cliente tiver refluxo, evite sugerir café forte, frituras, pimenta, cítricos e refeições enormes à noite.
+      </div>
+    </div>
+  </div>
+
+<script>
+  // pega dados do quiz salvos no navegador (do seu index.html)
+  const data = JSON.parse(localStorage.getItem("pci_quiz") || "{}");
+
+  // se não tiver dados, pede para refazer
+  if(!data.nome){
+    document.getElementById("plano").innerHTML =
+      "Não encontrei suas respostas. Volte e preencha o quiz novamente.";
+  } else {
+    const imc = (data.peso / Math.pow(data.altura/100,2)).toFixed(1);
+
+    // treino por frequência
+    let treino = "";
+    if(data.frequencia === "1-2") treino = "2x/semana: Full body A/B (alternando).";
+    if(data.frequencia === "3-4") treino = "4x/semana: Upper/Lower (A/B).";
+    if(data.frequencia === "5-6") treino = "5-6x/semana: Push/Pull/Legs + complementos.";
+    if(data.frequencia === "7") treino = "Todo dia: dividir por grupos + 1 dia leve (mobilidade/abdômen).";
+
+    // dieta simples por objetivo (compatível com refluxo)
+    let dieta = "";
+    if(data.objetivo === "Emagrecimento") dieta = "Foco: proteína alta + carbo moderado. Jantar leve (evitar refeições gigantes).";
+    if(data.objetivo === "Hipertrofia") dieta = "Foco: proteína alta + carbo suficiente para treino. Evitar gordura pesada à noite.";
+    if(data.objetivo === "Definição") dieta = "Foco: proteína alta + controle de carbo. Priorize alimentos fáceis de digerir.";
+
+    const planoHtml = `
+      👤 Nome: <b>${data.nome}</b><br>
+      🎂 Idade: ${data.idade}<br>
+      ⚖️ Peso: ${data.peso} kg<br>
+      📏 Altura: ${data.altura} cm<br>
+      📌 IMC estimado: ${imc}<br><br>
+      🏃 Status: ${data.status}<br>
+      📅 Frequência: ${data.frequencia}x/semana<br>
+      🏋️ Local: ${data.local}<br>
+      🎯 Objetivo: ${data.objetivo}<br>
+      🚀 Nível: ${data.nivel}<br><br>
+      🏋️ <b>Treino:</b> ${treino}<br>
+      🍽️ <b>Alimentação:</b> ${dieta}<br>
+      ✅ <b>Bônus:</b> lista de compras + substituições + guia de execução.
+    `;
+    document.getElementById("plano").innerHTML = planoHtml;
+
+    const texto = `PLANO CORPO IDEAL — ${data.nome}
+
+Idade: ${data.idade}
+Peso: ${data.peso} kg
+Altura: ${data.altura} cm
+Objetivo: ${data.objetivo}
+Nível: ${data.nivel}
+Frequência: ${data.frequencia}x/semana
+Local: ${data.local}
+Status: ${data.status}
+
+TREINO:
+- ${treino}
+
+ALIMENTAÇÃO (amigável para refluxo):
+- Priorize refeições menores à noite
+- Evite: café forte, frituras, pimenta, cítricos e chocolate em excesso
+- ${dieta}
+
+BÔNUS:
+- Cardápio simples 7 dias
+- Lista de compras + substituições
+- Guia de execução dos exercícios
+`;
+    document.getElementById("msg").value = texto;
+
+    // seu número (coloque seu WhatsApp com DDD e país 55)
+    const SEU_NUMERO = "55SEUDDDSEUNUMERO";
+    const waLink = "https://wa.me/" + SEU_NUMERO + "?text=" + encodeURIComponent(texto);
+    const waBtn = document.getElementById("wa");
+    waBtn.href = waLink;
+    waBtn.textContent = "📲 ENVIAR NO WHATSAPP AGORA";
+  }
+
+  function downloadTxt(){
+    const text = document.getElementById("msg").value;
+    const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "plano-corpo-ideal.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>
