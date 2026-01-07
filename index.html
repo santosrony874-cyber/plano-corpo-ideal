@@ -667,17 +667,16 @@
 }
 
 
-  function nextStep(){
-    if(!validateStep()) return;
+  function nextStep() {
+  // se estiver na última etapa, vai pro checkout
+  if (current >= steps.length - 1) {
+    window.location.href = "https://pay.kiwify.com.br/2aHDqEE";
+    return;
+  }
 
-    // última etapa: salvar e ir para pagamento
-    if(current >= steps.length - 1){
-      localStorage.setItem("pci_quiz", JSON.stringify(state));
-      window.open("https://mpago.la/28TAeox", "_blank");
-window.location.href = "./obrigado.html";
-
-      return;
-    }
+  // resto do seu código continua aqui...
+}
+}
 
     current++;
     showStep(current);
