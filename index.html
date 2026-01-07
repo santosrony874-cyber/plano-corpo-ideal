@@ -1,227 +1,827 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Plano Corpo Ideal — Plano Personalizado</title>
-<style>
-:root{
-  --bg:#0b1220; --card:#0f1a33;
-  --text:#eaf0ff; --muted:#a7b3d6;
-  --accent:#2ecc71; --danger:#ff5a6a;
-  --line:rgba(255,255,255,.10);
-  --radius:18px; --max:560px;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;font-family:system-ui,Arial,sans-serif;
-  color:var(--text);
-  background: radial-gradient(900px 600px at 10% 0%, #162a58 0%, transparent 60%),
-              radial-gradient(900px 700px at 90% 20%, #1b3a2f 0%, transparent 55%),
-              var(--bg);
-  min-height:100vh;display:flex;justify-content:center;
-}
-.wrap{width:100%;max-width:var(--max);padding:18px 14px 90px}
-.progress{height:10px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;border:1px solid rgba(255,255,255,.10)}
-.bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#23b862);transition:width .25s ease}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plano Corpo Ideal — Onboarding</title>
+  <style>
+    :root{
+      --bg:#070A0F;
+      --panel:#0D111A;
+      --panel2:#101828;
+      --text:#EAF0FF;
+      --muted:#9AA7C0;
+      --line:rgba(255,255,255,.08);
+      --accent:#4DD6D6; /* turquesa próprio */
+      --accent2:#2AA6B3;
+      --danger:#FF5A6A;
+      --radius:18px;
+      --shadow: 0 18px 40px rgba(0,0,0,.45);
+      --max: 560px;
+    }
+    *{ box-sizing:border-box }
+    body{
+      margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: radial-gradient(900px 500px at 20% -10%, rgba(77,214,214,.18), transparent 60%),
+                  radial-gradient(700px 500px at 100% 10%, rgba(42,166,179,.16), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex; justify-content:center;
+    }
+    .app{
+      width:100%;
+      max-width:var(--max);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      padding: 10px 14px 18px;
+    }
 
-.hero{
-  margin-top:14px;
-  padding:16px;border-radius:18px;
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-  border:1px solid rgba(255,255,255,.12);
-}
-.hero h1{margin:0 0 6px;font-size:28px;line-height:1.1}
-.hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+    /* Top bar */
+    .top{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 8px 4px 6px;
+      gap: 10px;
+    }
+    .top-left{ display:flex; align-items:center; gap:10px }
+    .iconbtn{
+      width:42px; height:42px;
+      border-radius:14px;
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      color:var(--text);
+      display:grid; place-items:center;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .iconbtn:active{ transform: scale(.98) }
+    .brand{
+      font-weight:800; letter-spacing:.5px;
+      color:var(--text);
+      opacity:.95;
+    }
+    .brand b{ color: var(--accent) }
 
-.card{
-  margin-top:14px;border-radius:var(--radius);
-  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-  border:1px solid rgba(255,255,255,.12);
-}
-.step{display:none;padding:16px}
-.step.active{display:block;animation:fade .18s ease}
-@keyframes fade{from{opacity:.2;transform:translateY(8px)}to{opacity:1;transform:none}}
+    /* progress */
+    .progress-wrap{
+      display:flex; align-items:center; gap:12px;
+      padding: 4px 6px 10px;
+    }
+    .bar{
+      position:relative;
+      flex:1;
+      height:6px;
+      border-radius:999px;
+      background: rgba(255,255,255,.07);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.05);
+    }
+    .bar > i{
+      position:absolute; inset:0;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius:999px;
+      transition: width .25s ease;
+    }
+    .stepcount{
+      font-size:12px;
+      color: var(--muted);
+      min-width: 52px;
+      text-align:right;
+    }
 
-h2{margin:0 0 10px;font-size:20px}
-.hint{margin:-6px 0 10px;color:var(--muted);font-size:13px}
+    /* content */
+    .content{
+      flex:1;
+      padding: 8px 2px 90px; /* espaço pro botão fixo */
+    }
+    .title{
+      font-size: 34px;
+      line-height:1.06;
+      margin: 8px 6px 6px;
+      letter-spacing:-.5px;
+      font-weight:900;
+    }
+    .subtitle{
+      margin: 0 6px 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height:1.45;
+    }
 
-input{
-  width:100%;padding:14px;border-radius:14px;
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(0,0,0,.18);
-  color:var(--text);font-size:16px;outline:none;
-}
-input::placeholder{color:rgba(255,255,255,.45)}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
 
-.grid{display:grid;gap:10px;margin-top:10px}
-.grid.two{grid-template-columns:1fr 1fr}
-@media(max-width:420px){.grid.two{grid-template-columns:1fr}}
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 10px 6px;
+    }
+    .grid1{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 10px 6px;
+    }
 
-.choice{
-  padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
-  background:rgba(255,255,255,.05);
-  cursor:pointer;user-select:none;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-}
-.choice:hover{border-color:rgba(46,204,113,.35)}
-.choice.selected{border-color:var(--accent);background:rgba(46,204,113,.14)}
+    .option{
+      display:flex;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .option:hover{
+      background: rgba(255,255,255,.045);
+    }
+    .option:active{ transform: scale(.99) }
+    .option.selected{
+      border-color: rgba(77,214,214,.55);
+      background: radial-gradient(400px 120px at 30% 0%, rgba(77,214,214,.18), transparent 65%),
+                  rgba(255,255,255,.04);
+    }
+    .option .meta{
+      display:flex; flex-direction:column; gap:4px;
+      min-width: 0;
+    }
+    .option .label{
+      font-size: 18px;
+      font-weight: 850;
+      letter-spacing:-.2px;
+    }
+    .option .desc{
+      font-size: 13px;
+      color: var(--muted);
+      line-height:1.35;
+    }
+    .badge{
+      margin-left:auto;
+      width: 34px; height: 34px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      flex: 0 0 auto;
+    }
+    .option.selected .badge{
+      color: var(--accent);
+      border-color: rgba(77,214,214,.45);
+      background: rgba(77,214,214,.10);
+    }
 
-.toast{display:none;color:#ffd4d9;font-size:13px;margin-top:10px}
-.toast.show{display:block}
+    /* big tile (com imagem fake via gradiente) */
+    .tile{
+      padding: 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.07);
+      cursor:pointer;
+      transition: border-color .12s ease, transform .12s ease, background .12s ease;
+    }
+    .tile:active{ transform: scale(.99) }
+    .tile.selected{
+      border-color: rgba(77,214,214,.55);
+      background: radial-gradient(600px 220px at 50% 0%, rgba(77,214,214,.16), transparent 60%),
+                  rgba(255,255,255,.035);
+    }
+    .tile .thumb{
+      height: 170px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(80px 80px at 55% 30%, rgba(255,255,255,.18), transparent 60%),
+        radial-gradient(120px 120px at 45% 70%, rgba(255,255,255,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      margin-bottom: 10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .tile .thumb:after{
+      content:"";
+      position:absolute; inset:-40px -80px auto -80px;
+      height:140px;
+      background: linear-gradient(90deg, transparent, rgba(77,214,214,.20), transparent);
+      transform: rotate(12deg);
+      opacity:.55;
+    }
+    .tile .tlabel{ font-weight:900; font-size: 18px }
+    .tile .tdesc{ color:var(--muted); font-size: 12.5px; margin-top:4px; line-height:1.35 }
 
-.summary{
-  margin-top:10px;
-  padding:12px;border-radius:14px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.04);
-  color:var(--muted);font-size:13px;line-height:1.45;
-}
-.offer{
-  margin-top:12px;
-  padding:14px;border-radius:14px;
-  border:1px solid rgba(255,255,255,.12);
-  background:linear-gradient(180deg, rgba(46,204,113,.10), rgba(255,255,255,.03));
-}
-.offer b{color:var(--text)}
-.small{color:rgba(255,255,255,.60);font-size:12px;line-height:1.35;margin-top:10px}
+    /* Social proof screen */
+    .hero{
+      margin: 12px 6px 4px;
+      padding: 18px;
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(700px 220px at 50% 0%, rgba(77,214,214,.18), transparent 60%),
+        rgba(255,255,255,.03);
+    }
+    .hero h2{
+      margin:0;
+      font-size: 40px;
+      letter-spacing:-.8px;
+      font-weight: 950;
+      line-height:1.05;
+    }
+    .hero h2 span{ color: var(--accent) }
+    .hero p{
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height:1.45;
+      font-size: 14px;
+    }
+    .avatars{
+      display:flex;
+      gap: 10px;
+      margin-top: 14px;
+      align-items:flex-end;
+    }
+    .av{
+      width: 76px; height: 110px;
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(70px 70px at 50% 28%, rgba(255,255,255,.15), transparent 60%),
+        radial-gradient(160px 160px at 50% 90%, rgba(77,214,214,.10), transparent 60%),
+        rgba(255,255,255,.03);
+      position:relative;
+      overflow:hidden;
+    }
+    .av:after{
+      content:"";
+      position:absolute; inset:auto -40px -40px -40px;
+      height:80px;
+      background: radial-gradient(120px 80px at 50% 0%, rgba(77,214,214,.18), transparent 65%);
+      opacity:.8;
+    }
 
-.nav{position:fixed;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(to top, rgba(11,18,32,.98), rgba(11,18,32,.62));backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.10)}
-.nav-inner{max-width:var(--max);margin:auto;display:flex;gap:10px}
-.btn{flex:1;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);font-weight:900;font-size:15px;cursor:pointer}
-.btn.primary{background:var(--accent);color:#062012;border-color:rgba(46,204,113,.35)}
-.btn.ghost{background:rgba(255,255,255,.06);color:#fff;max-width:140px;flex:0 0 auto}
-</style>
+    /* Inputs */
+    .field{
+      padding: 14px;
+      margin: 10px 6px 0;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .field label{
+      display:block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .row{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+    }
+    input[type="number"], input[type="text"]{
+      width:100%;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline:none;
+      font-size: 18px;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+    .seg{
+      display:flex; overflow:hidden;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      flex:0 0 auto;
+    }
+    .seg button{
+      padding: 12px 12px;
+      border:0;
+      background:transparent;
+      color: var(--muted);
+      cursor:pointer;
+      min-width: 62px;
+      font-weight: 800;
+    }
+    .seg button.on{
+      background: rgba(77,214,214,.18);
+      color: var(--text);
+    }
+    .hint{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.45;
+    }
+    .imc{
+      margin-top: 10px;
+      display:flex; justify-content:space-between; align-items:center;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .imc b{ color: var(--text) }
+
+    /* Bottom action */
+    .bottom{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: var(--max);
+      padding: 12px 14px 18px;
+      background: linear-gradient(180deg, transparent, rgba(7,10,15,.75) 25%, rgba(7,10,15,.95));
+      backdrop-filter: blur(6px);
+    }
+    .cta{
+      width:100%;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 0;
+      font-size: 18px;
+      font-weight: 950;
+      cursor:pointer;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: #041014;
+      transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+    }
+    .cta:active{ transform: scale(.99) }
+    .cta:disabled{
+      opacity:.35;
+      cursor:not-allowed;
+      filter: saturate(.2);
+    }
+    .smallnote{
+      text-align:center;
+      color: var(--muted);
+      font-size: 11.5px;
+      margin-top: 10px;
+      line-height:1.35;
+    }
+
+    /* util */
+    .hidden{ display:none !important; }
+  </style>
 </head>
 
 <body>
-<div class="wrap">
-  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="app">
+    <div class="top">
+      <div class="top-left">
+        <button class="iconbtn" id="btnBack" aria-label="Voltar">←</button>
+        <div class="brand">Plano <b>Corpo Ideal</b></div>
+      </div>
+      <button class="iconbtn" aria-label="Menu">☰</button>
+    </div>
 
-  <div class="hero">
-    <h1>Receba seu plano <span style="color:var(--accent)">personalizado</span></h1>
-    <p>Responda 1 minuto. No final você vê o resumo e libera o acesso imediato.</p>
+    <div class="progress-wrap">
+      <div class="bar" aria-label="Progresso"><i id="barFill"></i></div>
+      <div class="stepcount" id="stepCount">1/9</div>
+    </div>
+
+    <div class="content" id="content"></div>
+
+    <div class="bottom">
+      <button class="cta" id="btnNext" disabled>Continuar</button>
+      <div class="smallnote" id="smallNote">
+        Ao continuar, você confirma que as informações serão usadas para montar seu plano.
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <!-- 0 -->
-    <section class="step active" data-key="nome">
-      <h2>Qual é o seu nome?</h2>
-      <div class="hint">Só para personalizar seu plano.</div>
-      <input id="nome" placeholder="Ex: Rony" autocomplete="name">
-      <div class="toast" id="t_nome">Digite seu nome</div>
-    </section>
+  <script>
+    // =========================
+    // Modelo de dados (salvo no final)
+    // =========================
+    const answers = {
+      shape: null,          // "magro" | "medio" | "pesado" | "muito"
+      whereTrain: null,     // "casa" | "academia" | "hibrido"
+      gymType: null,        // "grande" | "pequena" | "casa"
+      issues: [],           // ["sem", "costas", "joelhos", ...]
+      heightCm: null,
+      weightKg: null,
+      lifestyle: null,      // "sentado" | "intervalos" | "empe"
+      energy: null,         // "baixa" | "posalmoco" | "antesref" | "alta"
+      ageGroup: null        // "18-29" | "30-39" | "40-49" | "50+"
+    };
 
-    <!-- 1 -->
-    <section class="step" data-key="idade">
-      <h2>Qual sua idade?</h2>
-      <div class="hint">Ajusta intensidade e recuperação.</div>
-      <input id="idade" type="number" inputmode="numeric" placeholder="Ex: 33" min="10" max="90">
-      <div class="toast" id="t_idade">Informe uma idade válida</div>
-    </section>
+    // =========================
+    // Steps (padrão tipo app)
+    // =========================
+    const steps = [
+      renderShape,
+      renderSocialProof,
+      renderWhereTrain,
+      renderGymType,
+      renderIssues,
+      renderHeightWeight,
+      renderLifestyle,
+      renderEnergy,
+      renderAgeGroup,
+      renderFinish
+    ];
 
-    <!-- 2 -->
-    <section class="step" data-key="peso">
-      <h2>Seu peso atual (kg)</h2>
-      <div class="hint">Usamos para calcular metas.</div>
-      <input id="peso" type="number" inputmode="decimal" placeholder="Ex: 80" min="30" max="250">
-      <div class="toast" id="t_peso">Informe um peso válido</div>
-    </section>
+    let stepIndex = 0;
 
-    <!-- 3 -->
-    <section class="step" data-key="altura">
-      <h2>Sua altura (cm)</h2>
-      <div class="hint">Ex.: 170 (sem ponto).</div>
-      <input id="altura" type="number" inputmode="numeric" placeholder="Ex: 170" min="120" max="230">
-      <div class="toast" id="t_altura">Informe uma altura válida</div>
-    </section>
+    const content = document.getElementById("content");
+    const btnNext = document.getElementById("btnNext");
+    const btnBack = document.getElementById("btnBack");
+    const barFill = document.getElementById("barFill");
+    const stepCount = document.getElementById("stepCount");
+    const smallNote = document.getElementById("smallNote");
 
-    <!-- 4 -->
-    <section class="step" data-key="status">
-      <h2>Você treina atualmente?</h2>
-      <div class="hint">Escolha a opção que mais combina com você.</div>
-      <div class="grid">
-        <div class="choice" data-value="Sedentário"><span>🛋️ Sedentário</span><span>›</span></div>
-        <div class="choice" data-value="Voltando agora"><span>🔁 Voltando agora</span><span>›</span></div>
-        <div class="choice" data-value="Treino regularmente"><span>🔥 Treino regularmente</span><span>›</span></div>
-      </div>
-      <div class="toast" id="t_status">Escolha uma opção</div>
-    </section>
+    function setProgress(){
+      const total = steps.length;
+      const current = Math.min(stepIndex + 1, total);
+      stepCount.textContent = `${current}/${total}`;
+      barFill.style.width = `${(current / total) * 100}%`;
+      btnBack.disabled = stepIndex === 0;
+      btnBack.style.opacity = stepIndex === 0 ? .4 : 1;
+    }
 
-    <!-- 5 -->
-    <section class="step" data-key="frequencia">
-      <h2>Quantas vezes treina por semana?</h2>
-      <div class="hint">Pra caber na sua rotina.</div>
-      <div class="grid two">
-        <div class="choice" data-value="1-2x"><span>1️⃣ 1–2x</span><span>›</span></div>
-        <div class="choice" data-value="3-4x"><span>3️⃣ 3–4x</span><span>›</span></div>
-        <div class="choice" data-value="5-6x"><span>5️⃣ 5–6x</span><span>›</span></div>
-        <div class="choice" data-value="Todo dia"><span>7️⃣ Todo dia</span><span>›</span></div>
-      </div>
-      <div class="toast" id="t_frequencia">Selecione uma frequência</div>
-    </section>
+    function setCta(text, enabled){
+      btnNext.textContent = text || "Continuar";
+      btnNext.disabled = !enabled;
+    }
 
-    <!-- 6 -->
-    <section class="step" data-key="local">
-      <h2>Onde você treina?</h2>
-      <div class="hint">Pra indicar exercícios certos.</div>
-      <div class="grid">
-        <div class="choice" data-value="Academia"><span>🏟️ Academia</span><span>›</span></div>
-        <div class="choice" data-value="Casa"><span>🏠 Casa</span><span>›</span></div>
-        <div class="choice" data-value="Ambos"><span>🔀 Ambos</span><span>›</span></div>
-      </div>
-      <div class="toast" id="t_local">Selecione uma opção</div>
-    </section>
+    function goTo(idx){
+      stepIndex = Math.max(0, Math.min(idx, steps.length - 1));
+      content.innerHTML = "";
+      steps[stepIndex]();
+      setProgress();
+    }
 
-    <!-- 7 -->
-    <section class="step" data-key="objetivo">
-      <h2>Qual seu objetivo principal?</h2>
-      <div class="hint">Pra deixar o plano certeiro.</div>
-      <div class="grid">
-        <div class="choice" data-value="Emagrecimento"><span>🔥 Emagrecimento</span><span>›</span></div>
-        <div class="choice" data-value="Hipertrofia"><span>💪 Hipertrofia</span><span>›</span></div>
-        <div class="choice" data-value="Definição"><span>🏁 Definição</span><span>›</span></div>
-      </div>
-      <div class="toast" id="t_objetivo">Selecione um objetivo</div>
-    </section>
+    btnBack.addEventListener("click", () => {
+      if(stepIndex > 0) goTo(stepIndex - 1);
+    });
 
-    <!-- 8 -->
-    <section class="step" data-key="nivel">
-      <h2>Seu nível de treino</h2>
-      <div class="hint">Define volume e progressão.</div>
-      <div class="grid">
-        <div class="choice" data-value="Iniciante"><span>🌱 Iniciante</span><span>›</span></div>
-        <div class="choice" data-value="Intermediário"><span>⚙️ Intermediário</span><span>›</span></div>
-        <div class="choice" data-value="Avançado"><span>🔥 Avançado</span><span>›</span></div>
-      </div>
-      <div class="toast" id="t_nivel">Selecione um nível</div>
-    </section>
+    btnNext.addEventListener("click", () => {
+      if(stepIndex < steps.length - 1) goTo(stepIndex + 1);
+    });
 
-    <!-- 9 -->
-    <section class="step" data-key="checkout">
-      <h2>Seu plano está quase pronto ✅</h2>
-      <div class="hint">Confira o resumo e libere o acesso.</div>
+    // Helpers
+    function hTitle(t){ return `<div class="title">${t}</div>`; }
+    function hSub(t){ return `<div class="subtitle">${t}</div>`; }
+    function optionHTML({id, label, desc, icon="✓", selected=false}){
+      return `
+        <div class="option ${selected ? "selected":""}" data-id="${id}">
+          <div class="meta">
+            <div class="label">${label}</div>
+            ${desc ? `<div class="desc">${desc}</div>`:""}
+          </div>
+          <div class="badge">${icon}</div>
+        </div>
+      `;
+    }
+    function tileHTML({id, label, desc, selected=false}){
+      return `
+        <div class="tile ${selected ? "selected":""}" data-id="${id}">
+          <div class="thumb"></div>
+          <div class="tlabel">${label}</div>
+          <div class="tdesc">${desc || ""}</div>
+        </div>
+      `;
+    }
 
-      <div class="summary" id="summary"></div>
+    // =========================
+    // STEP 1: Body shape (grid 2x2)
+    // =========================
+    function renderShape(){
+      smallNote.textContent = "Escolha a opção mais próxima — isso ajuda a ajustar o plano com precisão.";
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Como está seu corpo hoje?") +
+        hSub("Selecione a opção que mais se aproxima da sua forma atual.") +
+        `<div class="grid2">
+          ${tileHTML({id:"magro", label:"Magro", desc:"Baixo volume e pouca gordura", selected: answers.shape==="magro"})}
+          ${tileHTML({id:"medio", label:"Médio", desc:"Equilíbrio entre massa e gordura", selected: answers.shape==="medio"})}
+          ${tileHTML({id:"pesado", label:"Pesado", desc:"Mais gordura acumulada", selected: answers.shape==="pesado"})}
+          ${tileHTML({id:"muito", label:"Muito pesado", desc:"Gordura elevada e maior retenção", selected: answers.shape==="muito"})}
+        </div>`
+      );
 
-      <div class="offer">
-        <div><b>Oferta de lançamento:</b> R$ 39,90 (pagamento único)</div>
-        <div class="small">Após o pagamento você recebe automaticamente:</div>
-        <div class="small">✅ (1) Plano de Treino em PDF</div>
-        <div class="small">✅ (2) Plano Alimentar em PDF</div>
-      </div>
-    </section>
-  </div>
-</div>
+      const tiles = content.querySelectorAll(".tile");
+      tiles.forEach(t => t.addEventListener("click", () => {
+        answers.shape = t.dataset.id;
+        tiles.forEach(x => x.classList.toggle("selected", x.dataset.id === answers.shape));
+        setCta("Continuar", true);
+      }));
 
-<div class="nav">
-  <div class="nav-inner">
-    <button class="btn ghost" id="backBtn">← Voltar</button>
-    <button class="btn primary" id="nextBtn">Continuar</button>
-  </div>
-</div>
+      setCta("Continuar", !!answers.shape);
+    }
 
-<script>
-const steps
+    // =========================
+    // STEP 2: Social proof
+    // =========================
+    function renderSocialProof(){
+      smallNote.textContent = "Transparência: você poderá revisar tudo antes de finalizar.";
+      content.insertAdjacentHTML("beforeend",
+        `<div class="hero">
+          <h2><span>Resultados</span> com um plano que encaixa na sua rotina</h2>
+          <p>O Corpo Ideal monta um caminho simples: treino + alimentação prática, com progressão semanal e ajustes de acordo com seu nível.</p>
+          <div class="avatars">
+            <div class="av"></div>
+            <div class="av" style="height:124px"></div>
+            <div class="av" style="height:116px"></div>
+          </div>
+        </div>`
+      );
+      setCta("Continuar", true);
+    }
 
+    // =========================
+    // STEP 3: Where to train
+    // =========================
+    function renderWhereTrain(){
+      smallNote.textContent = "O plano adapta exercícios e equipamentos ao local escolhido.";
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Onde você quer treinar?") +
+        hSub("Escolha o cenário principal (pode ser ajustado depois).") +
+        `<div class="grid1">
+          ${optionHTML({id:"casa", label:"Em casa", desc:"Treinos com pouco ou nenhum equipamento", icon:"🏠", selected: answers.whereTrain==="casa"})}
+          ${optionHTML({id:"academia", label:"Academia", desc:"Máquinas, polias e pesos livres", icon:"🏋️", selected: answers.whereTrain==="academia"})}
+          ${optionHTML({id:"hibrido", label:"Híbrido", desc:"Combinação de casa + academia", icon:"🔁", selected: answers.whereTrain==="hibrido"})}
+        </div>`
+      );
 
+      const ops = content.querySelectorAll(".option");
+      ops.forEach(o => o.addEventListener("click", () => {
+        answers.whereTrain = o.dataset.id;
+        ops.forEach(x => x.classList.toggle("selected", x.dataset.id === answers.whereTrain));
+        setCta("Continuar", true);
+      }));
+
+      setCta("Continuar", !!answers.whereTrain);
+    }
+
+    // =========================
+    // STEP 4: Gym type
+    // =========================
+    function renderGymType(){
+      smallNote.textContent = "Isso define as variações de exercícios disponíveis.";
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Qual estrutura você tem?") +
+        hSub("Selecione a opção que melhor descreve sua academia (ou casa).") +
+        `<div class="grid1">
+          ${optionHTML({id:"grande", label:"Academia completa", desc:"Muitas máquinas, polias e pesos (ex: academias maiores)", icon:"✅", selected: answers.gymType==="grande"})}
+          ${optionHTML({id:"pequena", label:"Academia compacta", desc:"Equipamentos limitados, foco no essencial", icon:"➕", selected: answers.gymType==="pequena"})}
+          ${optionHTML({id:"casa", label:"Treino em casa", desc:"Banco, halteres, barra, elástico ou peso corporal", icon:"🏠", selected: answers.gymType==="casa"})}
+        </div>`
+      );
+
+      const ops = content.querySelectorAll(".option");
+      ops.forEach(o => o.addEventListener("click", () => {
+        answers.gymType = o.dataset.id;
+        ops.forEach(x => x.classList.toggle("selected", x.dataset.id === answers.gymType));
+        setCta("Continuar", true);
+      }));
+
+      // Se ele escolheu "whereTrain" casa/hibrido e aqui "academia", deixa — é só parâmetro.
+      setCta("Continuar", !!answers.gymType);
+    }
+
+    // =========================
+    // STEP 5: Issues (multi-select)
+    // =========================
+    function renderIssues(){
+      smallNote.textContent = "Marque tudo que se aplica — o plano evita exercícios que pioram dor.";
+      const has = (v) => answers.issues.includes(v);
+
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Você sente desconforto em alguma área?") +
+        hSub("Selecione todas as opções que se aplicam.") +
+        `<div class="grid1">
+          ${optionHTML({id:"sem", label:"Sem problemas", desc:"Sigo normalmente com qualquer treino", icon:"❌", selected: has("sem")})}
+          ${optionHTML({id:"costas", label:"Costas sensíveis", desc:"Preciso de atenção em puxadas/levantamentos", icon:"🧩", selected: has("costas")})}
+          ${optionHTML({id:"joelhos", label:"Joelhos sensíveis", desc:"Ajustar agachamentos e impacto", icon:"🦵", selected: has("joelhos")})}
+          ${optionHTML({id:"ombros", label:"Ombros sensíveis", desc:"Evitar movimentos acima da cabeça sem controle", icon:"💪", selected: has("ombros")})}
+          ${optionHTML({id:"cotovelos", label:"Cotovelos sensíveis", desc:"Cuidado com tríceps e puxadas pesadas", icon:"🧷", selected: has("cotovelos")})}
+        </div>`
+      );
+
+      const ops = content.querySelectorAll(".option");
+      ops.forEach(o => o.addEventListener("click", () => {
+        const id = o.dataset.id;
+
+        // Regra: "sem" é exclusivo
+        if(id === "sem"){
+          answers.issues = has("sem") ? [] : ["sem"];
+        } else {
+          // se escolheu algo, remove "sem"
+          answers.issues = answers.issues.filter(x => x !== "sem");
+          if(has(id)) answers.issues = answers.issues.filter(x => x !== id);
+          else answers.issues.push(id);
+        }
+
+        ops.forEach(x => x.classList.toggle("selected", answers.issues.includes(x.dataset.id)));
+
+        // Permite avançar mesmo sem marcar nada (mas melhor ter "sem" ou algo)
+        setCta("Continuar", true);
+      }));
+
+      setCta("Continuar", true);
+    }
+
+    // =========================
+    // STEP 6: Height/Weight + IMC
+    // =========================
+    function renderHeightWeight(){
+      smallNote.textContent = "Usamos altura e peso para estimar IMC e ajustar o plano inicial.";
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Vamos calcular seu IMC") +
+        hSub("Informe seus dados. Você pode ajustar depois.") +
+        `<div class="field">
+          <label>Altura (cm)</label>
+          <div class="row">
+            <input id="height" type="number" inputmode="numeric" placeholder="Ex: 170" min="80" max="230" value="${answers.heightCm ?? ""}">
+            <div class="seg" title="Unidade">
+              <button class="on" type="button">cm</button>
+            </div>
+          </div>
+          <div class="hint">Dica: altura em centímetros (ex: 1,70m = 170cm).</div>
+        </div>
+
+        <div class="field">
+          <label>Peso (kg)</label>
+          <div class="row">
+            <input id="weight" type="number" inputmode="decimal" placeholder="Ex: 79" min="25" max="250" step="0.1" value="${answers.weightKg ?? ""}">
+            <div class="seg" title="Unidade">
+              <button class="on" type="button">kg</button>
+            </div>
+          </div>
+
+          <div class="imc">
+            <span>IMC estimado</span>
+            <span><b id="imcValue">—</b></span>
+          </div>
+        </div>`
+      );
+
+      const elH = content.querySelector("#height");
+      const elW = content.querySelector("#weight");
+      const elIMC = content.querySelector("#imcValue");
+
+      function calc(){
+        const h = Number(elH.value);
+        const w = Number(elW.value);
+        if(h>0 && w>0){
+          const hm = h/100;
+          const imc = w/(hm*hm);
+          elIMC.textContent = imc.toFixed(1);
+          answers.heightCm = h;
+          answers.weightKg = w;
+          setCta("Continuar", true);
+        }else{
+          elIMC.textContent = "—";
+          setCta("Continuar", false);
+        }
+      }
+
+      elH.addEventListener("input", calc);
+      elW.addEventListener("input", calc);
+      calc();
+    }
+
+    // =========================
+    // STEP 7: Lifestyle
+    // =========================
+    function renderLifestyle(){
+      smallNote.textContent = "Isso ajuda a ajustar gasto calórico e recuperação.";
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Como é seu dia a dia?") +
+        hSub("Escolha a opção mais parecida com sua rotina.") +
+        `<div class="grid1">
+          ${optionHTML({id:"sentado", label:"Mais tempo sentado", desc:"Trabalho em computador, pouca movimentação", icon:"💻", selected: answers.lifestyle==="sentado"})}
+          ${optionHTML({id:"intervalos", label:"Ativo em alguns momentos", desc:"Caminho e me movimento ao longo do dia", icon:"🚶", selected: answers.lifestyle==="intervalos"})}
+          ${optionHTML({id:"empe", label:"Em pé e ativo o dia todo", desc:"Trabalho com movimento constante", icon:"🏃", selected: answers.lifestyle==="empe"})}
+        </div>`
+      );
+
+      const ops = content.querySelectorAll(".option");
+      ops.forEach(o => o.addEventListener("click", () => {
+        answers.lifestyle = o.dataset.id;
+        ops.forEach(x => x.classList.toggle("selected", x.dataset.id === answers.lifestyle));
+        setCta("Continuar", true);
+      }));
+
+      setCta("Continuar", !!answers.lifestyle);
+    }
+
+    // =========================
+    // STEP 8: Energy
+    // =========================
+    function renderEnergy(){
+      smallNote.textContent = "A energia define volume do treino e intensidade inicial.";
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Como está sua energia no dia?") +
+        hSub("Selecione a opção que descreve melhor você.") +
+        `<div class="grid1">
+          ${optionHTML({id:"baixa", label:"Baixa", desc:"Canso ao longo do dia", icon:"🟥", selected: answers.energy==="baixa"})}
+          ${optionHTML({id:"posalmoco", label:"Cai após o almoço", desc:"Sinto sono e queda de foco", icon:"🟧", selected: answers.energy==="posalmoco"})}
+          ${optionHTML({id:"antesref", label:"Oscila entre refeições", desc:"Melhora e piora durante o dia", icon:"🟨", selected: answers.energy==="antesref"})}
+          ${optionHTML({id:"alta", label:"Alta e estável", desc:"Boa disposição quase sempre", icon:"🟩", selected: answers.energy==="alta"})}
+        </div>`
+      );
+
+      const ops = content.querySelectorAll(".option");
+      ops.forEach(o => o.addEventListener("click", () => {
+        answers.energy = o.dataset.id;
+        ops.forEach(x => x.classList.toggle("selected", x.dataset.id === answers.energy));
+        setCta("Continuar", true);
+      }));
+
+      setCta("Continuar", !!answers.energy);
+    }
+
+    // =========================
+    // STEP 9: Age group (grid 2x2)
+    // =========================
+    function renderAgeGroup(){
+      smallNote.textContent = "Idade ajuda a ajustar descanso e progressão de cargas.";
+      content.insertAdjacentHTML("beforeend",
+        hTitle("Sua faixa de idade") +
+        hSub("Escolha a opção correta para calibrar o plano.") +
+        `<div class="grid2">
+          ${tileHTML({id:"18-29", label:"18–29", desc:"Mais tolerância a volume", selected: answers.ageGroup==="18-29"})}
+          ${tileHTML({id:"30-39", label:"30–39", desc:"Equilíbrio de recuperação", selected: answers.ageGroup==="30-39"})}
+          ${tileHTML({id:"40-49", label:"40–49", desc:"Foco em técnica e consistência", selected: answers.ageGroup==="40-49"})}
+          ${tileHTML({id:"50+", label:"50+", desc:"Treinos inteligentes e seguros", selected: answers.ageGroup==="50+"})}
+        </div>`
+      );
+
+      const tiles = content.querySelectorAll(".tile");
+      tiles.forEach(t => t.addEventListener("click", () => {
+        answers.ageGroup = t.dataset.id;
+        tiles.forEach(x => x.classList.toggle("selected", x.dataset.id === answers.ageGroup));
+        setCta("Gerar meu plano", true);
+      }));
+
+      setCta("Gerar meu plano", !!answers.ageGroup);
+    }
+
+    // =========================
+    // STEP 10: Finish + preview
+    // =========================
+    function renderFinish(){
+      smallNote.textContent = "Próximo passo: gerar treino e alimentação com base nas escolhas.";
+      const imc = (answers.heightCm && answers.weightKg)
+        ? (answers.weightKg / Math.pow(answers.heightCm/100,2)).toFixed(1)
+        : "—";
+
+      content.insertAdjacentHTML("beforeend",
+        `<div class="hero">
+          <h2>Pronto. Agora é <span>plano</span> na mão.</h2>
+          <p>Seu perfil foi montado. A próxima tela (que vamos implementar) vai gerar um treino e uma alimentação prática com progressão.</p>
+        </div>
+
+        <div class="field">
+          <label>Resumo do seu perfil (MVP)</label>
+          <div class="hint" style="margin-top:0">
+            <b>Forma:</b> ${answers.shape ?? "—"}<br>
+            <b>Onde treina:</b> ${answers.whereTrain ?? "—"}<br>
+            <b>Estrutura:</b> ${answers.gymType ?? "—"}<br>
+            <b>Cuidados:</b> ${(answers.issues.length ? answers.issues.join(", ") : "—")}<br>
+            <b>Alt/Peso:</b> ${(answers.heightCm ?? "—")}cm / ${(answers.weightKg ?? "—")}kg<br>
+            <b>IMC:</b> ${imc}<br>
+            <b>Rotina:</b> ${answers.lifestyle ?? "—"}<br>
+            <b>Energia:</b> ${answers.energy ?? "—"}<br>
+            <b>Idade:</b> ${answers.ageGroup ?? "—"}
+          </div>
+        </div>`
+      );
+
+      // Aqui, no próximo passo, você decide:
+      // - mostrar plano na tela
+      // - salvar em JSON
+      // - enviar pro WhatsApp/checkout etc.
+      setCta("Recomeçar", true);
+      btnNext.onclick = () => {
+        // reset simples
+        Object.assign(answers, {
+          shape:null, whereTrain:null, gymType:null, issues:[],
+          heightCm:null, weightKg:null, lifestyle:null, energy:null, ageGroup:null
+        });
+        btnNext.onclick = null;
+        goTo(0);
+      };
+    }
+
+    // init
+    goTo(0);
+  </script>
+</body>
+</html>
