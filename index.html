@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Plano Corpo Ideal — Plano Personalizado</title>
 <style>
-/* ====== ESTILO (mantido) ====== */
 :root{
-  --bg:#0b1220; --card:#0f1a33; --card2:#101d3a;
+  --bg:#0b1220; --card:#0f1a33;
   --text:#eaf0ff; --muted:#a7b3d6;
   --accent:#2ecc71; --danger:#ff5a6a;
   --line:rgba(255,255,255,.10);
@@ -17,26 +16,81 @@
 body{
   margin:0;font-family:system-ui,Arial,sans-serif;
   color:var(--text);
-  background:#0b1220;
+  background: radial-gradient(900px 600px at 10% 0%, #162a58 0%, transparent 60%),
+              radial-gradient(900px 700px at 90% 20%, #1b3a2f 0%, transparent 55%),
+              var(--bg);
   min-height:100vh;display:flex;justify-content:center;
 }
 .wrap{width:100%;max-width:var(--max);padding:18px 14px 90px}
-.progress{height:10px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden}
-.bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#23b862)}
-.card{margin-top:14px;border-radius:var(--radius);background:#0f1a33;border:1px solid var(--line)}
-.step{display:none;padding:16px}
-.step.active{display:block}
-.choice{
-  padding:14px;border-radius:14px;border:1px solid var(--line);
-  margin-top:10px;cursor:pointer;
+.progress{height:10px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;border:1px solid rgba(255,255,255,.10)}
+.bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#23b862);transition:width .25s ease}
+
+.hero{
+  margin-top:14px;
+  padding:16px;border-radius:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.12);
 }
-.choice.selected{border-color:var(--accent);background:rgba(46,204,113,.15)}
-.nav{position:fixed;left:0;right:0;bottom:0;padding:12px;background:#0b1220}
-.nav-inner{max-width:var(--max);margin:auto;display:flex;gap:10px}
-.btn{flex:1;padding:14px;border-radius:14px;border:none;font-weight:800}
-.btn.primary{background:var(--accent);color:#062012}
-.btn.ghost{background:#1b2a4a;color:#fff}
+.hero h1{margin:0 0 6px;font-size:28px;line-height:1.1}
+.hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+
+.card{
+  margin-top:14px;border-radius:var(--radius);
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.12);
+}
+.step{display:none;padding:16px}
+.step.active{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:.2;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+h2{margin:0 0 10px;font-size:20px}
+.hint{margin:-6px 0 10px;color:var(--muted);font-size:13px}
+
+input{
+  width:100%;padding:14px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.18);
+  color:var(--text);font-size:16px;outline:none;
+}
+input::placeholder{color:rgba(255,255,255,.45)}
+
+.grid{display:grid;gap:10px;margin-top:10px}
+.grid.two{grid-template-columns:1fr 1fr}
+@media(max-width:420px){.grid.two{grid-template-columns:1fr}}
+
+.choice{
+  padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  cursor:pointer;user-select:none;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.choice:hover{border-color:rgba(46,204,113,.35)}
+.choice.selected{border-color:var(--accent);background:rgba(46,204,113,.14)}
+
 .toast{display:none;color:#ffd4d9;font-size:13px;margin-top:10px}
+.toast.show{display:block}
+
+.summary{
+  margin-top:10px;
+  padding:12px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);font-size:13px;line-height:1.45;
+}
+.offer{
+  margin-top:12px;
+  padding:14px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg, rgba(46,204,113,.10), rgba(255,255,255,.03));
+}
+.offer b{color:var(--text)}
+.small{color:rgba(255,255,255,.60);font-size:12px;line-height:1.35;margin-top:10px}
+
+.nav{position:fixed;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(to top, rgba(11,18,32,.98), rgba(11,18,32,.62));backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.10)}
+.nav-inner{max-width:var(--max);margin:auto;display:flex;gap:10px}
+.btn{flex:1;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);font-weight:900;font-size:15px;cursor:pointer}
+.btn.primary{background:var(--accent);color:#062012;border-color:rgba(46,204,113,.35)}
+.btn.ghost{background:rgba(255,255,255,.06);color:#fff;max-width:140px;flex:0 0 auto}
 </style>
 </head>
 
@@ -44,98 +98,130 @@ body{
 <div class="wrap">
   <div class="progress"><div class="bar" id="bar"></div></div>
 
+  <div class="hero">
+    <h1>Receba seu plano <span style="color:var(--accent)">personalizado</span></h1>
+    <p>Responda 1 minuto. No final você vê o resumo e libera o acesso imediato.</p>
+  </div>
+
   <div class="card">
+    <!-- 0 -->
     <section class="step active" data-key="nome">
       <h2>Qual é o seu nome?</h2>
-      <input id="nome" placeholder="Ex: Rony">
-      <div class="toast" id="t0">Digite seu nome</div>
+      <div class="hint">Só para personalizar seu plano.</div>
+      <input id="nome" placeholder="Ex: Rony" autocomplete="name">
+      <div class="toast" id="t_nome">Digite seu nome</div>
     </section>
 
+    <!-- 1 -->
     <section class="step" data-key="idade">
       <h2>Qual sua idade?</h2>
-      <input id="idade" type="number">
-      <div class="toast" id="t1">Informe sua idade</div>
+      <div class="hint">Ajusta intensidade e recuperação.</div>
+      <input id="idade" type="number" inputmode="numeric" placeholder="Ex: 33" min="10" max="90">
+      <div class="toast" id="t_idade">Informe uma idade válida</div>
     </section>
 
+    <!-- 2 -->
+    <section class="step" data-key="peso">
+      <h2>Seu peso atual (kg)</h2>
+      <div class="hint">Usamos para calcular metas.</div>
+      <input id="peso" type="number" inputmode="decimal" placeholder="Ex: 80" min="30" max="250">
+      <div class="toast" id="t_peso">Informe um peso válido</div>
+    </section>
+
+    <!-- 3 -->
+    <section class="step" data-key="altura">
+      <h2>Sua altura (cm)</h2>
+      <div class="hint">Ex.: 170 (sem ponto).</div>
+      <input id="altura" type="number" inputmode="numeric" placeholder="Ex: 170" min="120" max="230">
+      <div class="toast" id="t_altura">Informe uma altura válida</div>
+    </section>
+
+    <!-- 4 -->
     <section class="step" data-key="status">
       <h2>Você treina atualmente?</h2>
-      <div class="choice" data-value="Sedentário">Sedentário</div>
-      <div class="choice" data-value="Voltando agora">Voltando agora</div>
-      <div class="choice" data-value="Treino regularmente">Treino regularmente</div>
-      <div class="toast" id="t2">Escolha uma opção</div>
+      <div class="hint">Escolha a opção que mais combina com você.</div>
+      <div class="grid">
+        <div class="choice" data-value="Sedentário"><span>🛋️ Sedentário</span><span>›</span></div>
+        <div class="choice" data-value="Voltando agora"><span>🔁 Voltando agora</span><span>›</span></div>
+        <div class="choice" data-value="Treino regularmente"><span>🔥 Treino regularmente</span><span>›</span></div>
+      </div>
+      <div class="toast" id="t_status">Escolha uma opção</div>
     </section>
 
+    <!-- 5 -->
+    <section class="step" data-key="frequencia">
+      <h2>Quantas vezes treina por semana?</h2>
+      <div class="hint">Pra caber na sua rotina.</div>
+      <div class="grid two">
+        <div class="choice" data-value="1-2x"><span>1️⃣ 1–2x</span><span>›</span></div>
+        <div class="choice" data-value="3-4x"><span>3️⃣ 3–4x</span><span>›</span></div>
+        <div class="choice" data-value="5-6x"><span>5️⃣ 5–6x</span><span>›</span></div>
+        <div class="choice" data-value="Todo dia"><span>7️⃣ Todo dia</span><span>›</span></div>
+      </div>
+      <div class="toast" id="t_frequencia">Selecione uma frequência</div>
+    </section>
+
+    <!-- 6 -->
+    <section class="step" data-key="local">
+      <h2>Onde você treina?</h2>
+      <div class="hint">Pra indicar exercícios certos.</div>
+      <div class="grid">
+        <div class="choice" data-value="Academia"><span>🏟️ Academia</span><span>›</span></div>
+        <div class="choice" data-value="Casa"><span>🏠 Casa</span><span>›</span></div>
+        <div class="choice" data-value="Ambos"><span>🔀 Ambos</span><span>›</span></div>
+      </div>
+      <div class="toast" id="t_local">Selecione uma opção</div>
+    </section>
+
+    <!-- 7 -->
+    <section class="step" data-key="objetivo">
+      <h2>Qual seu objetivo principal?</h2>
+      <div class="hint">Pra deixar o plano certeiro.</div>
+      <div class="grid">
+        <div class="choice" data-value="Emagrecimento"><span>🔥 Emagrecimento</span><span>›</span></div>
+        <div class="choice" data-value="Hipertrofia"><span>💪 Hipertrofia</span><span>›</span></div>
+        <div class="choice" data-value="Definição"><span>🏁 Definição</span><span>›</span></div>
+      </div>
+      <div class="toast" id="t_objetivo">Selecione um objetivo</div>
+    </section>
+
+    <!-- 8 -->
+    <section class="step" data-key="nivel">
+      <h2>Seu nível de treino</h2>
+      <div class="hint">Define volume e progressão.</div>
+      <div class="grid">
+        <div class="choice" data-value="Iniciante"><span>🌱 Iniciante</span><span>›</span></div>
+        <div class="choice" data-value="Intermediário"><span>⚙️ Intermediário</span><span>›</span></div>
+        <div class="choice" data-value="Avançado"><span>🔥 Avançado</span><span>›</span></div>
+      </div>
+      <div class="toast" id="t_nivel">Selecione um nível</div>
+    </section>
+
+    <!-- 9 -->
     <section class="step" data-key="checkout">
-      <h2>Resumo do seu plano</h2>
-      <div id="summary"></div>
-      <p><b>Valor:</b> R$ 39,90</p>
+      <h2>Seu plano está quase pronto ✅</h2>
+      <div class="hint">Confira o resumo e libere o acesso.</div>
+
+      <div class="summary" id="summary"></div>
+
+      <div class="offer">
+        <div><b>Oferta de lançamento:</b> R$ 39,90 (pagamento único)</div>
+        <div class="small">Após o pagamento você recebe automaticamente:</div>
+        <div class="small">✅ (1) Plano de Treino em PDF</div>
+        <div class="small">✅ (2) Plano Alimentar em PDF</div>
+      </div>
     </section>
   </div>
 </div>
 
 <div class="nav">
   <div class="nav-inner">
-    <button class="btn ghost" id="backBtn">Voltar</button>
+    <button class="btn ghost" id="backBtn">← Voltar</button>
     <button class="btn primary" id="nextBtn">Continuar</button>
   </div>
 </div>
 
 <script>
-const steps=[...document.querySelectorAll(".step")];
-const bar=document.getElementById("bar");
-let current=0;
+const steps
 
-const state={};
-
-function showStep(i){
-  steps.forEach((s,idx)=>s.classList.toggle("active",idx===i));
-  bar.style.width=((i+1)/steps.length*100)+"%";
-  document.getElementById("nextBtn").textContent=
-    i===steps.length-1?"Ir para pagamento":"Continuar";
-}
-
-document.querySelectorAll(".choice").forEach(c=>{
-  c.onclick=()=>{
-    c.parentElement.querySelectorAll(".choice")
-      .forEach(x=>x.classList.remove("selected"));
-    c.classList.add("selected");
-  };
-});
-
-function validateStep(){
-  const step=steps[current];
-  const key=step.dataset.key;
-
-  const input=step.querySelector("input");
-  if(input){
-    if(!input.value){step.querySelector(".toast").style.display="block";return false;}
-    state[key]=input.value;return true;
-  }
-
-  const selected=step.querySelector(".choice.selected");
-  if(selected){
-    state[key]=selected.dataset.value;return true;
-  }
-
-  return true;
-}
-
-function nextStep(){
-  if(!validateStep())return;
-
-  if(current===steps.length-1){
-    localStorage.setItem("pci_quiz",JSON.stringify(state));
-    window.location.href="https://pay.kiwify.com.br/2aHDqEE";
-    return;
-  }
-  current++;showStep(current);
-}
-function backStep(){if(current>0){current--;showStep(current)}}
-
-document.getElementById("nextBtn").onclick=nextStep;
-document.getElementById("backBtn").onclick=backStep;
-showStep(0);
-</script>
-</body>
-</html>
 
