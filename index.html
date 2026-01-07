@@ -666,8 +666,13 @@
     function nextStep(){
       if(current === steps.length - 1){
         // AQUI entra o pagamento/checkout.
-        alert("Checkout: aqui você pode integrar Mercado Pago / Pix / Hotmart.\n\nDados do cliente:\n" + JSON.stringify(state, null, 2));
-        return;
+        // salva as respostas do quiz
+localStorage.setItem("pci_quiz", JSON.stringify(state));
+
+// redireciona para o pagamento (Mercado Pago)
+window.location.href = https://mpago.la/28TAeox
+return;
+
       }
 
       if(!validateStep()) return;
